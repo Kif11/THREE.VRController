@@ -1,4 +1,4 @@
-
+[![npm version](https://badge.fury.io/js/three-vrcontroller-module.svg)](https://badge.fury.io/js/three-vrcontroller-module)
 
 THREE.VRController
 ==============================================================================
