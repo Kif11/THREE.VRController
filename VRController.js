@@ -4,7 +4,7 @@
  * @author Jeff Nusz / http://custom-logic.com
  * @author Data Arts Team / https://github.com/dataarts
  */
-import {Object3D, Matrix4, Vector3, Quaternion, Euler, _Math} from 'three-full'
+const {Object3D, Matrix4, Vector3, Quaternion, Euler, _Math} = require('three-full')
 
 
 
@@ -1433,4 +1433,4 @@ OrientationArmModel.prototype.quatAngle_ = function( q1, q2 ){
 	return vec1.angleTo( vec2 );
 }
 
-export default VRController
+module.exports = VRController
