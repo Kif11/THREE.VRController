@@ -4,7 +4,7 @@
  * @author Jeff Nusz / http://custom-logic.com
  * @author Data Arts Team / https://github.com/dataarts
  */
-import {Object3D, Matrix4, Vector3, Quaternion, Euler, _Math} from 'three-full'
+const {Object3D, Matrix4, Vector3, Quaternion, Euler, _Math} = require('three-full')
 
 
 
@@ -18,22 +18,22 @@ import {Object3D, Matrix4, Vector3, Quaternion, Euler, _Math} from 'three-full'
 
 
 	Why is this useful?
-	
+
 	1. This creates a Object3D() per connected Gamepad instance and
-	   passes it to you through a Window event for inclusion in your scene. 
+	   passes it to you through a Window event for inclusion in your scene.
 	   It then handles copying the live positions and orientations from the
 	   Gamepad instance to this Object3D.
 	2. It also broadcasts Gamepad button and axes events to you on this
 	   Object3D instance. For your convenience button names are mapped to
-	   objects in the buttons array on supported devices. (And this support 
+	   objects in the buttons array on supported devices. (And this support
 	   is easy to extend.) For implicitly supported devices you can continue
 	   to use the buttons array indexes.
 	3. This one JS file explicitly supports several existing VR controllers,
 	   and implicitly supports any controllers that operate similarly!
 
-	
+
 	What do I have to do?
-	
+
 	1. Include VRController.update() in your animation loop and listen
 	   for controller connection events like so:
 	   window.addEventlistener('vr controller connected', (controller)=>{}).
@@ -49,22 +49,22 @@ import {Object3D, Matrix4, Vector3, Quaternion, Euler, _Math} from 'three-full'
 
 
 
-    ///////////////////////
-   //                   //
-  //   VR Controller   //
- //                   //
+///////////////////////
+//                   //
+//   VR Controller   //
+//                   //
 ///////////////////////
 
 const VRController = function( gamepad ){
 
 	var
-	key, supported,
-	handedness  = '',
-	axes        = [],
-	axesMaps    = [],
-	buttons     = [],
-	buttonNames = [],
-	buttonNamePrimary
+		key, supported,
+		handedness  = '',
+		axes        = [],
+		axesMaps    = [],
+		buttons     = [],
+		buttonNames = [],
+		buttonNamePrimary
 
 	Object3D.call( this )
 	this.matrixAutoUpdate = false
@@ -285,11 +285,11 @@ const VRController = function( gamepad ){
 	this.pollForChanges = function(){
 
 		var
-		verbosity      = VRController.verbosity,
-		controller     = this,
-		controllerInfo = '> #'+ controller.gamepad.index +' '+ controller.gamepad.id +' (Handedness: '+ handedness +') ',
-		axesNames      = Object.keys( axes.byName ),
-		axesChanged    = false
+			verbosity      = VRController.verbosity,
+			controller     = this,
+			controllerInfo = '> #'+ controller.gamepad.index +' '+ controller.gamepad.id +' (Handedness: '+ handedness +') ',
+			axesNames      = Object.keys( axes.byName ),
+			axesChanged    = false
 
 
 		//  Did the handedness change?
@@ -362,9 +362,9 @@ const VRController = function( gamepad ){
 		buttons.forEach( function( button, i ){
 
 			var
-			controllerAndButtonInfo = controllerInfo + button.name +' ',
-			isPrimary = button.isPrimary,
-			eventAction
+				controllerAndButtonInfo = controllerInfo + button.name +' ',
+				isPrimary = button.isPrimary,
+				eventAction
 
 
 			//  If this button is analog-style then its values will range from
@@ -422,8 +422,8 @@ VRController.prototype.constructor = VRController
 VRController.prototype.update = function(){
 
 	var
-	gamepad = this.gamepad,
-	pose = gamepad.pose
+		gamepad = this.gamepad,
+		pose = gamepad.pose
 
 
 	//  ORIENTATION.
@@ -518,10 +518,10 @@ VRController.prototype.update = function(){
 
 
 
-    /////////////////
-   //             //
-  //   Vibrate   //
- //             //
+/////////////////
+//             //
+//   Vibrate   //
+//             //
 /////////////////
 
 
@@ -536,8 +536,8 @@ VRController.prototype.setVibe = function( name, intensity ){
 	if( typeof name === 'string' ){
 
 		const
-		controller = this,
-		o = {}
+			controller = this,
+			o = {}
 
 
 		//  If this channel does not exist yet we must create it,
@@ -595,8 +595,8 @@ VRController.prototype.renderVibes = function(){
 	//  and update the current intensity value.
 
 	const
-	now = window.performance.now(),
-	controller = this
+		now = window.performance.now(),
+		controller = this
 
 	controller.vibeChannels.forEach( function( channel ){
 
@@ -628,8 +628,8 @@ VRController.prototype.applyVibes = function(){
 		this.gamepad.hapticActuators[ 0 ]){
 
 		const
-		renderedIntensity = this.renderVibes(),
-		now = window.performance.now()
+			renderedIntensity = this.renderVibes(),
+			now = window.performance.now()
 
 		if( renderedIntensity !== this.vibeChannels.prior ||
 			now - this.vibeChannels.lastCommanded > VRController.VIBE_TIME_MAX / 2 ){
@@ -644,10 +644,10 @@ VRController.prototype.applyVibes = function(){
 
 
 
-    /////////////////
-   //             //
-  //   Statics   //
- //             //
+/////////////////
+//             //
+//   Statics   //
+//             //
 /////////////////
 
 
@@ -669,9 +669,9 @@ VRController.onGamepadConnect = function( gamepad ){
 	//  and pass it a reference to this gamepad.
 
 	var
-	scope = VRController,
-	controller = new scope( gamepad ),
-	hapticActuators = controller.gamepad.hapticActuators
+		scope = VRController,
+		controller = new scope( gamepad ),
+		hapticActuators = controller.gamepad.hapticActuators
 
 
 	//  We also need to store this reference somewhere so that we have a list
@@ -706,8 +706,8 @@ VRController.onGamepadDisconnect = function( gamepad ){
 	//  should detroy them. You don’t want memory leaks, right?
 
 	var
-	scope = VRController,
-	controller = scope.controllers[ gamepad.index ]
+		scope = VRController,
+		controller = scope.controllers[ gamepad.index ]
 
 	if( scope.verbosity >= 0.5 ) console.log( 'vr controller disconnected', controller )
 	controller.dispatchEvent({ type: 'disconnected', controller: controller })
@@ -810,10 +810,10 @@ VRController.inspect = function(){
 
 
 
-    /////////////////
-   //             //
-  //   Support   //
- //             //
+/////////////////
+//             //
+//   Support   //
+//             //
 /////////////////
 
 
@@ -827,10 +827,10 @@ VRController.supported = {
 
 
 
-	    //////////////////
-	   //              //
-	  //   Daydream   //
-	 //              //
+	//////////////////
+	//              //
+	//   Daydream   //
+	//              //
 	//////////////////
 
 
@@ -857,10 +857,10 @@ VRController.supported = {
 
 
 
-	    //////////////
-	   //          //
-	  //   Vive   //
-	 //          //
+	//////////////
+	//          //
+	//   Vive   //
+	//          //
 	//////////////
 
 
@@ -946,10 +946,10 @@ VRController.supported = {
 
 
 
-	    ////////////////
-	   //            //
-	  //   Oculus   //
-	 //            //
+	////////////////
+	//            //
+	//   Oculus   //
+	//            //
 	////////////////
 
 
@@ -1057,10 +1057,10 @@ VRController.supported = {
 
 
 
-	    ///////////////////
-	   //               //
-	  //   Microsoft   //
-	 //               //
+	///////////////////
+	//               //
+	//   Microsoft   //
+	//               //
 	///////////////////
 
 
@@ -1183,10 +1183,10 @@ VRController.supported = {
 
 
 
-    ///////////////////
-   //               //
-  //   Arm Model   //
- //               //
+///////////////////
+//               //
+//   Arm Model   //
+//               //
 ///////////////////
 
 
@@ -1292,10 +1292,10 @@ OrientationArmModel.prototype.update = function(){
 	//  to the camera orientation.
 
 	var
-	headYawQ = this.getHeadYawOrientation_(),
-	timeDelta = (this.time - this.lastTime) / 1000,
-	angleDelta = this.quatAngle_( this.lastControllerQ, this.controllerQ ),
-	controllerAngularSpeed = angleDelta / timeDelta;
+		headYawQ = this.getHeadYawOrientation_(),
+		timeDelta = (this.time - this.lastTime) / 1000,
+		angleDelta = this.quatAngle_( this.lastControllerQ, this.controllerQ ),
+		controllerAngularSpeed = angleDelta / timeDelta;
 
 	if( controllerAngularSpeed > OrientationArmModel.MIN_ANGULAR_SPEED ){
 
@@ -1332,7 +1332,7 @@ OrientationArmModel.prototype.update = function(){
 	var elbowRatio = OrientationArmModel.ELBOW_BEND_RATIO;
 	var wristRatio = 1 - OrientationArmModel.ELBOW_BEND_RATIO;
 	var lerpValue = lerpSuppression *
-			(elbowRatio + wristRatio * extensionRatio * OrientationArmModel.EXTENSION_RATIO_WEIGHT);
+		(elbowRatio + wristRatio * extensionRatio * OrientationArmModel.EXTENSION_RATIO_WEIGHT);
 
 	var wristQ = new Quaternion().slerp(controllerCameraQ, lerpValue);
 	var invWristQ = wristQ.inverse();
@@ -1406,8 +1406,8 @@ OrientationArmModel.prototype.getWristPosition = function(){
 OrientationArmModel.prototype.getHeadYawOrientation_ = function(){
 
 	var
-	headEuler = new Euler().setFromQuaternion( this.headQ, 'YXZ' ),
-	destinationQ;
+		headEuler = new Euler().setFromQuaternion( this.headQ, 'YXZ' ),
+		destinationQ;
 
 	headEuler.x  = 0;
 	headEuler.z  = 0;
@@ -1425,12 +1425,12 @@ OrientationArmModel.prototype.clamp_ = function( value, min, max ){
 OrientationArmModel.prototype.quatAngle_ = function( q1, q2 ){
 
 	var
-	vec1 = new Vector3( 0, 0, -1 ),
-	vec2 = new Vector3( 0, 0, -1 );
+		vec1 = new Vector3( 0, 0, -1 ),
+		vec2 = new Vector3( 0, 0, -1 );
 
 	vec1.applyQuaternion( q1 );
 	vec2.applyQuaternion( q2 );
 	return vec1.angleTo( vec2 );
 }
 
-export default VRController
+module.exports = VRController
